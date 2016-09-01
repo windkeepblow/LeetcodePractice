@@ -7,7 +7,24 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+
 class Solution {
+//fast
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (root == NULL) return true;
+        return isSymmetricHelper(root->left, root->right);
+    }
+
+    bool isSymmetricHelper(TreeNode* left, TreeNode* right) {
+        if (left == NULL || right == NULL) return left == right;
+        if (left->val != right->val) return false;
+        return isSymmetricHelper(left->left, right->right) && isSymmetricHelper(left->right, right->left);
+    }
+};
+
+class Solution {
+//slow
 public:
     bool isSymmetric(TreeNode* root) {
         if (root == NULL) return true;
@@ -26,34 +43,47 @@ public:
      
     vector<int> left_traverse(TreeNode* root) {
         vector<int> res;
-        left_helper(res, root);
-        return res;
-    }
-
-    void left_helper(vector<int>& res, TreeNode* node) {
-        if (node == NULL) {
-            res.push_back(-1);
-            return;
+        if (root == NULL) return res;
+        stack<TreeNode*> buf;
+        TreeNode* node = root;
+        buf.push(node);
+        while (buf.size() > 0) {
+            node = buf.top();
+            if (node != NULL) {
+               res.push_back(node->val);
+            } else {
+               res.push_back(-1);
+            }
+            buf.pop();
+            
+            if (node != NULL) {
+                buf.push(node->left);
+                buf.push(node->right);
+            }
         }
-        left_helper(res, node->left);
-        left_helper(res, node->right);
-        res.push_back(node->val);
+        return res;
     }
 
     vector<int> right_traverse(TreeNode* root) {
         vector<int> res;
-        right_helper(res, root);
+        if (root == NULL) return res;
+        stack<TreeNode*> buf;
+        TreeNode* node = root;
+        buf.push(node);
+        while (buf.size() > 0) {
+            node = buf.top();
+            if (node != NULL) {
+               res.push_back(node->val);
+            } else {
+               res.push_back(-1);
+            }
+            buf.pop();
+            
+            if (node != NULL) {
+                buf.push(node->right);
+                buf.push(node->left);
+            }
+        }
         return res;
     }
-
-    void right_helper(vector<int>& res, TreeNode* node) {
-        if (node == NULL) {
-            res.push_back(-1);
-            return;
-        }
-        right_helper(res, node->right);
-        right_helper(res, node->left);
-        res.push_back(node->val);
-    }
-
 };

@@ -1,7 +1,6 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-    	sort(nums.begin(), nums.end());
         vector<vector<int>> res;
         vector<int> buf;
         subsets_helper(res, buf, nums, 0, nums.size());
